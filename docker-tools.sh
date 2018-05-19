@@ -17,7 +17,7 @@ function usage_and_exit {
         exit;
 }
 
-if [[ "$#" -lt 1 || "$#" -eq 2 || "$#" -gt 3 ]]; then
+if [[ "$#" -ne 1 && "$#" -ne 3 ]]; then
 	usage_and_exit
 fi
 if [[ "$#" -eq 1 && $1 == "new" ]]; then
@@ -61,7 +61,7 @@ for i in "${NETLINK[@]}"
 do
         P1=`echo $i | cut -d ':' -f 1`
         P2=`echo $i | cut -d ':' -f 2`
-        NETLINK_OPT="$DIRMAP_OPT --link $P1:$P2"
+        NETLINK_OPT="$NETLINK_OPT --link $P1:$P2"
 done
 
 
