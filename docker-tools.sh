@@ -37,7 +37,7 @@ if [[ $1 != "new" ]]; then
 fi
 
 FILENAME=`realpath $0`
-DIRNAME=`dirname $FILENAME`
+DIRNAME=`pwd`
 
 
 for i in `set`
@@ -63,7 +63,6 @@ do
         P2=`echo $i | cut -d ':' -f 2`
         NETLINK_OPT="$NETLINK_OPT --link $P1:$P2"
 done
-
 
 echo $NETLINK_OPT
 case $1 in
