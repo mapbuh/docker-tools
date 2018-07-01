@@ -59,12 +59,14 @@ done
 
 for i in "${NETLINK[@]}"
 do
-        P1=`echo $i | cut -d ':' -f 1`
-        P2=`echo $i | cut -d ':' -f 2`
-        NETLINK_OPT="$NETLINK_OPT --link $P1:$P2"
+        NETLINK_OPT="$NETLINK_OPT --link $i"
 done
 
-echo $NETLINK_OPT
+for i in "${DOCKERENV[@]}"
+do
+        DOCKERENV_OPT="$DOCKERENV_OPT -e $i'"
+done
+
 case $1 in
 	new)
 		if [[ !(-d $2) ]]; then
@@ -94,8 +96,9 @@ case $1 in
                         ${PORTFW}                                               \
                         ${DIRMAP_OPT}                                           \
 			${NETLINK_OPT}						\
+			${DOCKERENV_OPT}					\
                         --restart="unless-stopped"                              \
-                        ${NAME}-image /root/start.sh
+                        ${NAME}-image #/root/start.sh
                 ;;
         start)
                 echo "Running ${NAME}"
