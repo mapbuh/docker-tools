@@ -1,0 +1,19 @@
+NAME=ftp.example.com
+# port mappings PORT<Container Port>=<Host port>
+PORT21=8040
+PORT8041=8041
+PORT8042=8042
+PORT8043=8043
+PORT8044=8044
+PORT8045=8045
+PORT8046=8046
+PORT8047=8047
+PORT8048=8048
+PORT8049=8049
+PORT8050=8050
+# directory mappings (<host dir inside data dir>:<container dir>)
+DIRMAP=(/etc_proftpd:/etc/proftpd /var_log_proftpd:/var/log/proftpd /ftpdata/ftpuser:/home/ftpuser/ftp)
+# network links
+#NETLINK=(bind.example.com:bind redis.example.com:redis)
+# environment
+#DOCKERENV=(A1='X1' A2='X2')
