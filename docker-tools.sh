@@ -38,6 +38,7 @@ fi
 
 FILENAME=`realpath $0`
 DIRNAME=`pwd`
+DATADIR="${DIRNAME}/data/";
 
 
 for i in `set`
@@ -47,14 +48,29 @@ do
                 P2=`echo ${i:4} | cut -d '=' -f 2`
                 PORTFW="$PORTFW -p $P2:$P1"
         fi
+        if [[ $i == "UPORT"* ]]; then
+                P1=`echo ${i:5} | cut -d '=' -f 1`
+                P2=`echo ${i:5} | cut -d '=' -f 2`
+                PORTFW="$PORTFW -p $P2:$P1/udp"
+        fi
 done
-
 
 for i in "${DIRMAP[@]}"
 do
         P1=`echo $i | cut -d ':' -f 1`
         P2=`echo $i | cut -d ':' -f 2`
         DIRMAP_OPT="$DIRMAP_OPT -v ${DIRNAME}/data$P1:$P2"
+done
+
+for i in "${VOLMAP[@]}"
+do
+        P1=`echo $i | cut -d ':' -f 1`
+        P2=`echo $i | cut -d ':' -f 2`
+	if [[ ${P1:0:1} == '/' ]]; then
+		DIRMAP_OPT="$DIRMAP_OPT -v $P1:$P2"
+	else
+		DIRMAP_OPT="$DIRMAP_OPT -v ${DATADIR}$P1:$P2"
+	fi
 done
 
 for i in "${NETLINK[@]}"

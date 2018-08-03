@@ -1,0 +1,13 @@
+NAME=postfix
+# port mappings PORT<Container Port>=<Host port>
+PORT25=25
+PORT80=8026
+PORT143=143
+PORT587=587
+PORT993=993
+# directory mappings (<host dir inside data dir>:<container dir>)
+DIRMAP=(/postfix:/etc/postfix /dovecot:/etc/dovecot /log:/var/log /mailname:/etc/mailname /letsencrypt:/etc/letsencrypt)
+# network links
+#NETLINK=(bind.example.com:bind redis.example.com:redis)
+# environment
+#DOCKERENV=(A1='X1' A2='X2')

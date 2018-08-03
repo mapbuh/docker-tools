@@ -1,0 +1,9 @@
+NAME=example.com
+# port mappings PORT<Container Port>=<Host port>
+PORT80=8001
+# directory mappings (<host dir inside data dir>:<container dir>)
+DIRMAP=(/www:/var/www /log:/var/log)
+# network links
+#NETLINK=(bind.example.com:bind redis.example.com:redis)
+# environment
+#DOCKERENV=(A1='X1' A2='X2')

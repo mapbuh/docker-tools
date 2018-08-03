@@ -1,0 +1,12 @@
+NAME=bind
+# port mappings PORT<Container Port>=<Host port>
+PORT22=8001
+PORT53=53
+UPORT53=53
+# directory mappings (<host dir inside data dir>:<container dir>)
+#DIRMAP=(/bind:/etc/bind)
+VOLMAP=(bind:/etc/bind)
+# network links
+#NETLINK=(bind.example.com:bind redis.example.com:redis)
+# environment
+#DOCKERENV=(A1='X1' A2='X2')
