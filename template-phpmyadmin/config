@@ -1,0 +1,10 @@
+NAME=phpmyadmin.example.com
+# port mappings PORT<Container Port>=<Host port>
+PORT80=8001
+# directory mappings (<host dir inside data dir>:<container dir>)
+#DIRMAP=(/bind:/etc/bind)
+#VOLMAP=(bind:/etc/bind)
+# network links
+#NETLINK=(bind.example.com:bind redis.example.com:redis)
+# environment
+DOCKERENV=(PMA_HOST="172.17.0.1" PMA_ABSOLUTE_URI="https://phpmyadmin.example.com" PMA_ARBITRARY=0)
