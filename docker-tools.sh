@@ -80,7 +80,7 @@ done
 
 for i in "${DOCKERENV[@]}"
 do
-        DOCKERENV_OPT="$DOCKERENV_OPT -e $i'"
+        DOCKERENV_OPT="$DOCKERENV_OPT -e $i"
 done
 
 case $1 in
