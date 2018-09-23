@@ -13,6 +13,7 @@ function usage_and_exit {
         echo "  start                     - starts a stopped container (docker start)"
         echo "  stop                      - stop a container"
 	echo "  shell                     - run a terminal inside container ( docker exec -ti bash )"
+	echo "  snapshot                  - create snapshot"
 	echo 
         exit;
 }
@@ -39,6 +40,8 @@ fi
 FILENAME=`realpath $0`
 DIRNAME=`pwd`
 DATADIR="${DIRNAME}/data/";
+DATE=`date +%Y%m%d`
+DATETIME=`date +%Y%m%d%H%M%S`
 
 
 for i in `set`
@@ -153,6 +156,11 @@ case $1 in
                         docker rmi ${NAME}-image
                 fi
                 ;;
+	snapshot)
+		echo -n "Saving ${NAME}-image:${DATETIME}... "
+		docker commit ${NAME} ${NAME}-image:${DATETIME}
+		echo "done"
+		;;
         *)
                 echo "Unknown option"
                 ;;
