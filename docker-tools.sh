@@ -14,6 +14,7 @@ function usage_and_exit {
         echo "  stop                      - stop a container"
 	echo "  shell                     - run a terminal inside container ( docker exec -ti bash )"
 	echo "  snapshot                  - create snapshot"
+	echo "  snapshot-all              - create snapshot for all(!) running docker images"
 	echo 
         exit;
 }
@@ -28,8 +29,8 @@ if [[ "$#" -eq 3 && $1 != "new" ]]; then
 	usage_and_exit
 fi
 
-if [[ $1 != "new" ]]; then
-	if [[ !(-a .config) && !(-f Dockerfile) ]]; then
+if [[ $1 != "new" && $1 != "snapshot-all" ]]; then
+	if [[ !(-a config && -f Dockerfile) ]]; then
 		echo "Error: Not a docker-tools directory"
 		echo
 		exit;
@@ -160,6 +161,23 @@ case $1 in
 		echo -n "Saving ${NAME}-image:${DATETIME}... "
 		docker commit ${NAME} ${NAME}-image:${DATETIME}
 		echo "done"
+		;;
+	snapshot-all)
+		SAVEIFS=$IFS
+		IFS=$(echo -en "\n\b")
+		for i in `docker ps --format "{{.Names}} {{.Image}}"`
+		do 
+			echo $i
+			CNAME=`echo $i | cut -f 1 -d ' '`
+			INAME=`echo $i | cut -f 2 -d ' '`
+			echo docker commit $CNAME ${INAME}:${DATETIME}
+			echo -n "Saving ${INAME}:${DATETIME}... "
+			docker commit $CNAME ${INAME}:${DATETIME}
+		done
+		IFS=$SAVEIFS
+#		echo -n "Saving ${NAME}-image:${DATETIME}... "
+#		docker commit ${NAME} ${NAME}-image:${DATETIME}
+#		echo "done"
 		;;
         *)
                 echo "Unknown option"
