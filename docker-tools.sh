@@ -43,7 +43,10 @@ DIRNAME=`pwd`
 DATADIR="${DIRNAME}/data/";
 DATE=`date +%Y%m%d`
 DATETIME=`date +%Y%m%d%H%M%S`
-
+if [ -z ${IMAGE+x} ];
+then 
+	IMAGE="${NAME}-image"
+fi
 
 for i in `set`
 do
@@ -106,7 +109,7 @@ case $1 in
 		echo
 		;;
         build)
-                docker build --build-arg NAME=${NAME} -t ${NAME}-image .
+                docker build --build-arg NAME=${NAME} -t ${IMAGE} .
                 ;;
         init)
                 echo "Running ${NAME}"
@@ -118,7 +121,7 @@ case $1 in
 			${NETLINK_OPT}						\
 			${DOCKERENV_OPT}					\
                         --restart="unless-stopped"                              \
-                        ${NAME}-image #/root/start.sh
+                        ${IMAGE} #/root/start.sh
                 ;;
         start)
                 echo "Running ${NAME}"
@@ -153,13 +156,13 @@ case $1 in
                         docker stop ${NAME}
                         echo "docker rm ${NAME}"
                         docker rm ${NAME}
-                        echo "docker rmi ${NAME}-image"
-                        docker rmi ${NAME}-image
+                        echo "docker rmi ${IMAGE}"
+                        docker rmi ${IMAGE}
                 fi
                 ;;
 	snapshot)
-		echo -n "Saving ${NAME}-image:${DATETIME}... "
-		docker commit ${NAME} ${NAME}-image:${DATETIME}
+		echo -n "Saving ${IMAGE}:${DATETIME}... "
+		docker commit ${NAME} ${IMAGE}:${DATETIME}
 		echo "done"
 		;;
 	snapshot-all)
@@ -175,8 +178,8 @@ case $1 in
 			docker commit $CNAME ${INAME}:${DATETIME}
 		done
 		IFS=$SAVEIFS
-#		echo -n "Saving ${NAME}-image:${DATETIME}... "
-#		docker commit ${NAME} ${NAME}-image:${DATETIME}
+#		echo -n "Saving ${IMAGE}:${DATETIME}... "
+#		docker commit ${NAME} ${IMAGE}:${DATETIME}
 #		echo "done"
 		;;
         *)
