@@ -1,0 +1,5 @@
+NAME=gitlab.alphons.org
+PORT22=8053
+PORT80=8054
+VOLMAP=(config:/etc/gitlab log:/var/log/gitlab data:/var/opt/gitlab)
+IMAGE=gitlab/gitlab-ce:latest
