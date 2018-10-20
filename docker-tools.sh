@@ -87,7 +87,9 @@ done
 
 for i in "${DOCKERENV[@]}"
 do
-        DOCKERENV_OPT="$DOCKERENV_OPT -e $i"
+        P1=`echo $i | cut -d '=' -f 1`
+        P2=`echo $i | cut -d '=' -f 2`
+        DOCKERENV_OPT="$DOCKERENV_OPT --env $P1=$P2"
 done
 
 case $1 in
@@ -113,7 +115,7 @@ case $1 in
                 ;;
         init)
                 echo "Running ${NAME}"
-                docker run -d                                                   \
+		docker run -d                                                   \
                         -h ${NAME}                                              \
                         --name ${NAME}                                          \
                         ${PORTFW}                                               \
@@ -122,6 +124,7 @@ case $1 in
 			${DOCKERENV_OPT}					\
                         --restart="unless-stopped"                              \
                         ${IMAGE} #/root/start.sh
+#                        ubuntu env #/root/start.sh
                 ;;
         start)
                 echo "Running ${NAME}"
@@ -144,7 +147,7 @@ case $1 in
                 fi
                 ;;
         shell)
-                docker exec -ti ${NAME} /bin/bash
+                docker exec -ti ${NAME} /bin/bash || docker exec -ti ${NAME} /bin/sh
                 ;;
         clean)
                 echo "Are you sure you want to delete container and image?"
