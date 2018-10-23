@@ -15,6 +15,7 @@ function usage_and_exit {
 	echo "  shell                     - run a terminal inside container ( docker exec -ti bash )"
 	echo "  snapshot                  - create snapshot"
 	echo "  snapshot-all              - create snapshot for all(!) running docker images"
+	echo "  save			  - save current changes to the image"
 	echo 
         exit;
 }
@@ -29,7 +30,7 @@ if [[ "$#" -eq 3 && $1 != "new" ]]; then
 	usage_and_exit
 fi
 
-if [[ $1 != "new" && $1 != "snapshot-all" ]]; then
+if [[ "$1" != "new" && "$1" != "snapshot-all" && "$1" != "save-all" ]]; then
 	if [[ !(-a config && -f Dockerfile) ]]; then
 		echo "Error: Not a docker-tools directory"
 		echo
@@ -135,6 +136,7 @@ case $1 in
                 docker stop ${NAME}
                 ;;
         deinit)
+		echo -e "\nYou will loose all unsaved data unless you used 'docker-tools.sh save' first!!!\n"
                 echo "Are you sure you want to deinit container?"
                 read -p "Type the name of the container (${NAME}): " -r
                 echo # (optional) move to a new line
@@ -150,6 +152,7 @@ case $1 in
                 docker exec -ti ${NAME} /bin/bash || docker exec -ti ${NAME} /bin/sh
                 ;;
         clean)
+		echo -e "\nYou will loose all container data!!!\n"
                 echo "Are you sure you want to delete container and image?"
                 read -p "Type the name of the container (${NAME}): " -r
                 echo # (optional) move to a new line
@@ -179,6 +182,25 @@ case $1 in
 			echo docker commit $CNAME ${INAME}:${DATETIME}
 			echo -n "Saving ${INAME}:${DATETIME}... "
 			docker commit $CNAME ${INAME}:${DATETIME}
+		done
+		IFS=$SAVEIFS
+#		echo -n "Saving ${IMAGE}:${DATETIME}... "
+#		docker commit ${NAME} ${IMAGE}:${DATETIME}
+#		echo "done"
+		;;
+	save)
+		docker commit $NAME ${IMAGE}:latest
+		;;
+	save-all)
+		SAVEIFS=$IFS
+		IFS=$(echo -en "\n\b")
+		for i in `docker ps --format "{{.Names}} {{.Image}}"`
+		do 
+			echo $i
+			CNAME=`echo $i | cut -f 1 -d ' '`
+			INAME=`echo $i | cut -f 2 -d ' '`
+			echo -n "Saving ${INAME}:${DATETIME}... "
+			docker commit $CNAME ${INAME}:latest
 		done
 		IFS=$SAVEIFS
 #		echo -n "Saving ${IMAGE}:${DATETIME}... "
