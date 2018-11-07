@@ -16,6 +16,8 @@ function usage_and_exit {
 	echo "  snapshot                  - create snapshot"
 	echo "  snapshot-all              - create snapshot for all(!) running docker images"
 	echo "  save			  - save current changes to the image"
+	echo "  save-all		  - save current changes for all(!) running dokcer images"
+	echo "  export			  - export <name>-<datetime>.tar.gz archive of container fs"
 	echo 
         exit;
 }
@@ -207,6 +209,10 @@ case $1 in
 #		docker commit ${NAME} ${IMAGE}:${DATETIME}
 #		echo "done"
 		;;
+	export)
+		docker export ${NAME} | gzip -c > ${NAME}-${DATETIME}.tar.gz
+		;;
+
         *)
                 echo "Unknown option"
                 ;;
