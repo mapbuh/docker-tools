@@ -127,7 +127,6 @@ case $1 in
 			${DOCKERENV_OPT}					\
                         --restart="unless-stopped"                              \
                         ${IMAGE} #/root/start.sh
-#                        ubuntu env #/root/start.sh
                 ;;
         start)
                 echo "Running ${NAME}"
