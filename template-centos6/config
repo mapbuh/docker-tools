@@ -1,6 +1,6 @@
-NAME=debian.min.solutions
+NAME=centos6.docker
 # port mappings PORT<Container Port>=<Host port>
-PORT3000=8060
+#PORT3000=8060
 # directory mappings (<host dir inside data dir>:<container dir>)
 VOLMAP=(data:/data)
 # network links
