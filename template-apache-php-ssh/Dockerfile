@@ -1,7 +1,7 @@
 FROM debian:stable-slim
 ARG NAME
 CMD /root/start.sh
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y openssh-server apache2 php-fpm php-curl php-gd php-json php-mysql rsync vim composer php-zip php-mbstring php-xml sudo wget
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y openssh-server apache2 php-fpm php-curl php-gd php-json php-mysql rsync vim composer php-zip php-mbstring php-xml sudo wget php-bcmath php-soap php-intl php-mbstring
 RUN a2enmod proxy_fcgi setenvif rewrite remoteip
 RUN a2enconf php7.0-fpm
 COPY start.sh /root/start.sh
