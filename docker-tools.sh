@@ -22,17 +22,34 @@ function usage_and_exit {
         exit;
 }
 
-if [[ "$#" -ne 1 && "$#" -ne 3 ]]; then
-	usage_and_exit
-fi
-if [[ "$#" -eq 1 && $1 == "new" ]]; then
-	usage_and_exit
-fi
-if [[ "$#" -eq 3 && $1 != "new" ]]; then
-	usage_and_exit
+function container_exec {
+	container="$1"
+	shift
+	cmdParams=("$@")
+
+	output=$(docker exec -t $container ${cmdParams[@]})
+	if [ $? -ne 0 ]
+	then
+		echo -e "[$container]: ${cmdParams[@]}\n$output\n[$container] Error\n"
+	else
+		echo -e "[$container]: ${cmdParams[@]}\n$output\n[$container] Success\n"
+	fi
+}
+
+if [[ "$1" != "pexec" ]]
+then
+	if [[ "$#" -ne 1 && "$#" -ne 3 ]]; then
+		usage_and_exit
+	fi
+	if [[ "$#" -eq 1 && $1 == "new" ]]; then
+		usage_and_exit
+	fi
+	if [[ "$#" -eq 3 && $1 != "new" ]]; then
+		usage_and_exit
+	fi
 fi
 
-if [[ "$1" != "new" && "$1" != "snapshot-all" && "$1" != "save-all" ]]; then
+if [[ "$1" != "new" && "$1" != "snapshot-all" && "$1" != "save-all" && "$1" != "pexec" ]]; then
 	if [[ !(-a config && -f Dockerfile) ]]; then
 		echo "Error: Not a docker-tools directory"
 		echo
@@ -210,6 +227,13 @@ case $1 in
 		;;
 	export)
 		docker export ${NAME} | gzip -c > ${NAME}-${DATETIME}.tar.gz
+		;;
+	pexec)
+		cmdParams=${@:2}
+		for i in `docker ps --format "table {{.Names}}" | tail -n +2`
+		do
+			container_exec $i ${cmdParams[@]} &
+		done
 		;;
 
         *)
